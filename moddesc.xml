@@ -1,24 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="24">
-    <author>Grisu118 - VertexDezign.net</author>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="31">
+    <author>Grisu118 - Vertexdezign</author>
     <version>2.0</version>
     <title>
-        <en>Light Addon</en>
-        <de>Licht Addon</de>
+        <en>LightAddon</en>
+        <de>LightAddon</de>
     </title>
     <description>
-        <en>The Light Addon is a global Script.
-The script extends the fs standard light functions, so the light and the beacon stays on after leaving the vehicle, also the turnlights are resetted after turning.
-
-Additional there is the possibility to add day drive light and strobelights for mods. How this works you can see in the ReadMe.pdf.</en>
-        <de>Das Licht Addon ist ein globales Script, es baut sich somit selbst in die Fahrzeuge ein.
-Das Script erweiter die Standardlichtfunktionen, so bleibt das Licht und die Rundumleuchte beim Aussteigen aus dem Fahrzeug an, ebenso setzten sich die Blinker nach dem Abbiegen zurück.
-
-Zusätzliche gibt es die Möglichkeit Tagfahrlicht und Blitzlichter (Strobelights) für Mods zu definieren. Wie das genau funktioniert entnehmt ihr bitte der beiligenden pdf.</de>
+        <en><![CDATA[Shows the current real time in the upper right corner.]]></en>
+        <de><![CDATA[Zeigt die aktuelle echte Uhrzeit oben rechts im Spiel an.]]></de>
     </description>
     <iconFilename>store_LA.png</iconFilename>
-    <multiplayer supported="true"/>
+    <multiplayer supported="true" />
     <extraSourceFiles>
+		<sourceFile filename="GrisuDebug.lua" />
 		<sourceFile filename="addSpecialization.lua" />
-    </extraSourceFiles>
+	</extraSourceFiles>
 </modDesc>
