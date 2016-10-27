@@ -19,7 +19,9 @@ end;
 
 addModEventListener(addSpecialization);
 
-function addSpecialization:loadMap(name)	
+function addSpecialization:loadMap(name)
+	self.addLAdebugger = GrisuDebug:create("addSpecialization ( LightAddon )")	
+	self.addLAdebugger:setLogLvl(GrisuDebug.DEBUG)
     if not g_currentMission.lightModLoaded then
 		if not addSpecialization.isLoaded then
 			addSpecialization:add();
@@ -28,7 +30,8 @@ function addSpecialization:loadMap(name)
 		
 		g_currentMission.lightModLoaded = true;
 	else
-		print("LightAddon - Error: The LightAddon mod have been loaded already! remove one of the copy's");
+		self.addLAdebugger:print(GrisuDebug.ERROR, "The LightAddon mod have been loaded already! remove one of the copy's")
+		--print("LightAddon - Error: The LightAddon mod have been loaded already! remove one of the copy's");
 	end;
 end;
 
@@ -50,7 +53,7 @@ end;
 
 function addSpecialization:add()
 	local searchWords = {"LightAddon"};
-	local searchSpecializations = {{"LightAddon", false}}; -- only globally accessible scripts. (steerable, fillable etc.)
+	local searchSpecializations = {{"LightAddon", false}, {"lights", true}}; -- only globally accessible scripts. (steerable, fillable etc.)
 	
 	for k, vehicle in pairs(VehicleTypeUtil.vehicleTypes) do
 		local locationAllowed, specialization;
@@ -120,14 +123,14 @@ function addSpecialization:add()
 			
 			if addSpec == nil then
 				table.insert(vehicle.specializations, SpecializationUtil.getSpecialization("LightAddon"));
-				--print("LightAddon: Inserted on " .. k);
+				self.addLAdebugger:print(GrisuDebug.TRACE, "LightAddon: Inserted on " .. k);
 			else
-				print("LightAddon: Failed inserting on " .. k .. " as it has the specialization (" .. addSpec .. ")");
+				self.addLAdebugger:print(GrisuDebug.INFO, "Failed inserting on " .. k .. " as it has the specialization (" .. addSpec .. ")");
 			end;
 		elseif locationAllowed == "has" then
-			print("LightAddon: Failed inserting on " .. k .. " as it has the specialization (" .. specialization .. ")");
+			self.addLAdebugger:print(GrisuDebug.INFO,"Failed inserting on " .. k .. " as it has the specialization (" .. specialization .. ")");
 		else
-			-- print("LightAddon: Failed inserting on " .. k .. " as its missing specialization " .. specialization);
+			self.addLAdebugger:print(GrisuDebug.INFO,"Failed inserting on " .. k .. " as its missing specialization " .. specialization);
 		end;
 	end;
 end;

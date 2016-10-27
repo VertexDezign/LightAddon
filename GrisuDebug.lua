@@ -5,7 +5,6 @@
 -- @Descripion: Providing debug utils
 -- @web: http://grisu118.ch or http://vertexdezign.net
 -- Copyright (C) Grisu118, All Rights Reserved.
-
 GrisuDebug = {}
 GrisuDebug.__index = GrisuDebug
 
@@ -16,19 +15,19 @@ GrisuDebug.WARNING = 4;
 GrisuDebug.ERROR = 5;
 
 function GrisuDebug:create(name, id)
-   local d = {}             -- our new object
-   setmetatable(d,GrisuDebug)  -- make Account handle lookup
-   d.name = name      -- initialize our object
-   d.id = id
-   d.lvl = GrisuDebug.DEBUG
-   return d
+    local d = {}-- our new object
+    setmetatable(d, GrisuDebug)-- make Account handle lookup
+    d.name = name -- initialize our object
+    d.id = id
+    d.lvl = GrisuDebug.DEBUG
+    return d
 end
 
 function GrisuDebug:setLogLvl(lvl)
     self.lvl = lvl
 end
 
-function GrisuDebug:printLog(lvl, txt)
+function GrisuDebug:print(lvl, txt)
     if lvl < self.lvl then
         return
     end
