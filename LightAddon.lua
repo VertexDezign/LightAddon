@@ -31,6 +31,9 @@ end
 function LightAddon:load(savegame)
     self.setState = SpecializationUtil.callSpecializationsFunction("setState")
     self.setBeaconLightsVisibility   = Utils.appendedFunction(self.setBeaconLightsVisibility, LightAddon.setBeaconLightsVisibility)
+    self.startMotor = Utils.appendedFunction(self.startMotor, LightAddon.startMotor)
+    self.stopMotor = Utils.appendedFunction(self.stopMotor, LightAddon.stopMotor)
+    self.setLightsTypesMask = Utils.appendedFunction(self.setLightsTypesMask, LightAddon.setLightsTypesMask)
 
     self.LA = {}
     
@@ -50,6 +53,9 @@ function LightAddon:load(savegame)
     self.LA.drl = {}
     self.LA.drlIsActive = false
     self.LA.hasDRL = false
+
+    self.LA.drlAlwaysOn = Utils.getNoNil(getXMLBool(self.xmlFile, "vehicle.LightAddon#drlAllwaysOn"), false)
+
     local i = 0
     while true do
         local key = string.format("vehicle.LightAddon.drl(%d)", i)
@@ -93,10 +99,11 @@ function LightAddon:load(savegame)
             if not str.isBeacon then
                 local name = getXMLString(self.xmlFile, key .. "#name")
                 
-                if name ~= nil and self.LA.modName ~= nil and g_i18n:hasText(self.LA.modName .. name) then
-                    str.name = self.LA.modName .. name
+                if name ~= nil and self.configFileName ~= nil and g_i18n:hasText(self.configFileName .. name) then
+                    str.name = self.configFileName .. name
                     str.input = name
                     self.LA.helptexts[name] = g_i18n:getText(str.name)
+                    self.LA.debugger:print(GrisuDebug.DEBUG, "HelpText: " .. tostring(self.LA.helptexts[name]))
                     if InputBinding[str.input] == nil then
                         self.LA.debugger:print(GrisuDebug.ERROR, "no input defined for " .. name)
                         error = true
@@ -195,7 +202,7 @@ function LightAddon:updateTick(dt)
 end
 
 function LightAddon:draw()
-    if g_currentMission.showHelpText and self.isClient and self:getIsActiveForLights() then
+    if self.isClient and self:getIsActiveForLights() then
         for k, str in pairs(self.LA.helptexts) do
             g_currentMission:addHelpButtonText(str, InputBinding[k])
         end
@@ -203,15 +210,34 @@ function LightAddon:draw()
 end
 
 function LightAddon:setBeaconLightsVisibility(visibility, force, noEventSend)
-    self.LA.debugger:print(GrisuDebug.TRACE, "setBeaconLightsVisibility( " .. tostring(visibility) .. ", " .. tostring(force) .. ", ".. tostring(noEventSend) .. ")")
+    self.LA.debugger:print(GrisuDebug.TRACE, "setBeaconLightsVisibility(" .. tostring(visibility) .. ", " .. tostring(force) .. ", ".. tostring(noEventSend) .. ")")
     self:setState("beacon", visibility)
 end
 
+function LightAddon:startMotor(noEventSend)
+    self.LA.debugger:print(GrisuDebug.TRACE, "startMotor(" .. tostring(noEventSend) .. ")")
+    self:setState("drl", true, true)
+end
 
+function LightAddon:stopMotor(noEventSend)
+    self.LA.debugger:print(GrisuDebug.TRACE, "stopMotor(" .. tostring(noEventSend) .. ")")
+    self:setState("drl", false, true)
+end
 
+function LightAddon:setLightsTypesMask(lightsTypesMask, force, noEventSend)
+    self.LA.debugger:print(GrisuDebug.TRACE, "setLightsTypesMask(" .. tostring(lightsTypesMask) .. ", " .. tostring(force) .. ", ".. tostring(noEventSend) .. ")")
+    if not self.LA.drlAllwaysOn and self.getIsMotorStarted ~= nil and self:getIsMotorStarted() then
+        if self.lightsTypesMask == 0 then
+            self:setState("drl", true, true)
+        else
+            self:setState("drl", false, true)
+        end
+        
+    end
+end
 
 function LightAddon:setState(obj, state, noEventSend)
-    self.LA.debugger:print(GrisuDebug.TRACE, "setState( " .. tostring(obj) .. ", " .. tostring(state) .. ", " .. tostring(noEventSend) .. " ) called with " .. tostring(self.configFileName))
+    self.LA.debugger:print(GrisuDebug.TRACE, "setState(" .. tostring(obj) .. ", " .. tostring(state) .. ", " .. tostring(noEventSend) .. " ) called with " .. tostring(self.configFileName))
     if obj == "beacon" then
         for _, str in ipairs(self.LA.str) do
             if str.isBeacon then
@@ -224,7 +250,7 @@ function LightAddon:setState(obj, state, noEventSend)
         for _, v in ipairs(self.LA.drl) do
             setVisibility(v.decoration, self.LA.drlIsActive)
             if v.realLight ~= nil then
-                setVisibility(v.realLight, false)
+                setVisibility(v.realLight, self.LA.drlIsActive and self:getUseHighProfile())
             end
         end
     elseif string.match(obj, "strobe.*") ~= nil then
@@ -232,8 +258,9 @@ function LightAddon:setState(obj, state, noEventSend)
         local index = tonumber(ind)
         self.LA.str[index].isAcitve = state
     end
-    
-    LightAddonEvent.sendEvent(self, obj, state, noEventSend)
+    if noEventSend == nil or noEventSend == false then
+        LightAddonEvent.sendEvent(self, obj, state, noEventSend)
+    end
 end
 
 function LightAddon:readStream(streamId, connection)

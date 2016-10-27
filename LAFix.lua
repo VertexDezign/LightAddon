@@ -14,17 +14,17 @@ function LAFix.prerequisitesPresent(specializations)
     return true;
 end;
 
-function LAFix:load(xmlFile)
+function LAFix:load(savegame)
 	local i = 0;
     while true do
         local key = string.format("vehicle.LightAddon.strobe(%d)", i);
-		if not hasXMLProperty(xmlFile, key) then
+		if not hasXMLProperty(self.xmlFile, key) then
 			break;
 		end;
-		local n = getXMLString(xmlFile, key .. "#name");
+		local n = getXMLString(self.xmlFile, key .. "#name");
 		if n ~= nil then
-			local x,_ = Utils.getModNameAndBaseDirectory(self.configFileName);
-			g_i18n.globalI18N.texts[x..n] = g_i18n:getText(n);
+			--local x,_ = Utils.getModNameAndBaseDirectory(self.configFileName);
+			g_i18n.globalI18N.texts[self.configFileName..n] = g_i18n:getText(n);
 		end;
 		i = i + 1;
 	end;
