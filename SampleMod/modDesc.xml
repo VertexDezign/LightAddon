@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="32">
+    <author>Grisu118 - VertexDezign</author>
+    <title>LightAddon SampleMod</title>
+    <description>SampleMod</description>
+    <title>
+        <en>LightAddon SampleMod</en>
+        <de>LightAddon SampleMod</de>
+    </title>
+    <description>
+        <en><![CDATA[Tatra as Sample Mod]]></en>
+        <de><![CDATA[Tatra als Beispiel Mod]]></de>
+    </description>
+    <version>1.0.0.0</version>
+    <iconFilename>store_tatraPhoenix.dds</iconFilename>
+    <multiplayer supported="true"/>
+    <l10n>
+        <text name="SampleStrobe1">
+			<en>Strobes</en>
+			<de>Blitzlichter</de>
+        </text>
+	</l10n>	
+
+    <inputBindings>		
+		<input name="SampleStrobe1" category="VEHICLE" key1="KEY_z"/>
+	</inputBindings>
+
+    <storeItems>
+        <storeItem rootNode="vehicle" xmlFilename="tatraPhoenix.xml"/>
+    </storeItems>
+
+    <specializations>
+		<specialization name="LAFix" className="LAFix" filename="LAFix.lua"/>
+	</specializations>
+    <vehicleTypes>
+        <type name="LASampleMod" className="Vehicle" filename="$dataS/scripts/vehicles/Vehicle.lua">
+            <specialization name="attacherJoints" />
+            <specialization name="frontloaderAttacher" />
+            <specialization name="lights" />
+            <specialization name="animatedVehicle" />
+            <specialization name="speedRotatingParts" />
+            <specialization name="motorized" />
+            <specialization name="steerable" />
+            <specialization name="drivable" />
+            <specialization name="cylindered" />
+            <specialization name="aiVehicle" />
+            <specialization name="bunkerSiloCompacter" />
+            <specialization name="honk" />
+            <specialization name="washable" />
+            <specialization name="mountable" />
+            <specialization name="wheelRotations" />
+            <specialization name="LAFix" />
+        </type>
+    </vehicleTypes>
+</modDesc>
