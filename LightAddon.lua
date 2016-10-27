@@ -152,7 +152,7 @@ function LightAddon:update(dt)
             if str.time > str.seqLen then
                 str.seqActive = not str.seqActive
                 setVisibility(str.decoration, str.seqActive)
-                if str.realLight ~= nil then
+                if  g_realBeaconLights and str.realLight ~= nil then
                     setVisibility(str.realLight, str.seqActive)
                 end
                 str.time = 0
@@ -173,7 +173,7 @@ function LightAddon:update(dt)
             str.time = str.time + dt
         else
             setVisibility(str.decoration, str.isAcitve)
-            if str.realLight ~= nil then
+            if  g_realBeaconLights and str.realLight ~= nil then
                 setVisibility(str.realLight, str.isAcitve)
             end
         end
