@@ -22,4 +22,4 @@
 ## Credits
 Grisu118 - VertexDezign
 ### Sample Mod
-Giants, itzc0br4 - Fire-Technology
+Giants, Fire-Technology
