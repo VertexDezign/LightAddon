@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="32">
     <author>Grisu118 - VertexDezign</author>
-    <title>LightAddon SampleMod</title>
-    <description>SampleMod</description>
     <title>
         <en>LightAddon SampleMod</en>
         <de>LightAddon SampleMod</de>
@@ -18,6 +16,10 @@
         <text name="SampleStrobe1">
 			<en>Strobes</en>
 			<de>Blitzlichter</de>
+        </text>
+        <text name="input_SampleStrobe1">
+			<en>Strobes LA SampleMod</en>
+			<de>Blitzlichter LightAddon SampleMod</de>
         </text>
 	</l10n>	
 

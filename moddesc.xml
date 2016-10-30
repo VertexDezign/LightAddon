@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="31">
+<modDesc descVersion="32">
     <author>Grisu118 - Vertexdezign</author>
     <version>2.0</version>
     <title>
@@ -7,8 +7,8 @@
         <de>LightAddon</de>
     </title>
     <description>
-        <en><![CDATA[Shows the current real time in the upper right corner.]]></en>
-        <de><![CDATA[Zeigt die aktuelle echte Uhrzeit oben rechts im Spiel an.]]></de>
+        <en><![CDATA[Add Support for Strobe- and Daydrivelights, also reset the turnsignals]]></en>
+        <de><![CDATA[Fügt Blitzlichter und Tagfahrlicht Unterstützung hinzu. Die Blinker werden nach dem Fahren einer Kurve wieder zurückgesetzt.]]></de>
     </description>
     <iconFilename>store_LA.png</iconFilename>
     <multiplayer supported="true" />

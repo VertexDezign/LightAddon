@@ -129,7 +129,7 @@
     <reverseLights>
         <reverseLight realLight="0>2|6|1" decoration="0>2|6|0"/>
     </reverseLights>
-    <LightAddon drlAllwaysOn="true">
+    <LightAddon drlAllwaysOn="false">
         <drl decoration="0>2|9|0" realLight="0>2|9|1"/>
         <strobe decoration="0>2|8|0|0" realLight="0>2|8|0|1" isBeacon="true" />
         <strobe decoration="0>2|8|1|0" realLight="0>2|8|1|1" isBeacon="true" />

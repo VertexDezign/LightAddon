@@ -41,7 +41,7 @@ function LightAddon:load(savegame)
     self.LA.modName = x
     
     self.LA.debugger = GrisuDebug:create("LightAddon (" .. tostring(self.configFileName) .. ")")
-	self.LA.debugger:setLogLvl(GrisuDebug.TRACE)
+	self.LA.debugger:setLogLvl(GrisuDebug.INFO)
     self.LA.debugger:print(GrisuDebug.TRACE, "load(xml)")
 
     --Turn Signals
@@ -57,7 +57,7 @@ function LightAddon:load(savegame)
     self.LA.drlIsActive = false
     self.LA.hasDRL = false
 
-    self.LA.drlAlwaysOn = Utils.getNoNil(getXMLBool(self.xmlFile, "vehicle.LightAddon#drlAllwaysOn"), false)
+    self.LA.drlAllwaysOn = Utils.getNoNil(getXMLBool(self.xmlFile, "vehicle.LightAddon#drlAllwaysOn"), false)
 
     local i = 0
     while true do
@@ -238,7 +238,8 @@ end
 
 function LightAddon:startMotor(noEventSend)
     self.LA.debugger:print(GrisuDebug.TRACE, "startMotor(" .. tostring(noEventSend) .. ")")
-    self:setState("drl", true, true)
+    local state = self.LA.drlAllwaysOn or ( not self.LA.drlAllwaysOn and self.lightsTypesMask == 0)
+    self:setState("drl", state, true)
 end
 
 function LightAddon:stopMotor(noEventSend)
@@ -254,7 +255,7 @@ function LightAddon:setLightsTypesMask(lightsTypesMask, force, noEventSend)
         else
             self:setState("drl", false, true)
         end
-        
+
     end
 end
 
@@ -268,6 +269,7 @@ function LightAddon:setState(obj, state, noEventSend)
         end
         return --Needed to avoid that strobes which are beacons syncs two times.
     elseif obj == "drl" then
+
         self.LA.drlIsActive = state
         for _, v in ipairs(self.LA.drl) do
             setVisibility(v.decoration, self.LA.drlIsActive)
