@@ -43,6 +43,9 @@ function LightAddon:load(savegame)
     self.LA.debugger = GrisuDebug:create("LightAddon (" .. tostring(self.configFileName) .. ")")
 	self.LA.debugger:setLogLvl(GrisuDebug.TRACE)
     self.LA.debugger:print(GrisuDebug.TRACE, "load(xml)")
+
+    --Turn Signals
+	self.LA.steerTresh = 0.7
     
     --BeaconLights
     self.LA.beaconActive = false
@@ -195,6 +198,25 @@ function LightAddon:update(dt)
             end
         end
     end
+
+     if self:getIsActive() and self.turnLights ~= nil then
+            if self.turnLightState ~= Lights.TURNLIGHT_HAZARD and self.turnLightState ~= Lights.TURNLIGHT_OFF then --Reset turnlights after driving a curve
+                if math.abs(self.rotatedTime/self.maxRotTime) > self.LA.steerTresh then
+                    self.LA.steerTreshReached = true
+                    self.LA.debugger:print(GrisuDebug.TRACE, "steerTreshReached")
+                end
+                if self.LA.steerTreshReached and math.abs(self.rotatedTime) <= 0.1 then
+                    if self.rotatedTime > 0 and self.turnLightState == Lights.TURNLIGHT_LEFT then
+                        self:setTurnLightState(Lights.TURNLIGHT_OFF, false);
+                        self.LA.debugger:print(GrisuDebug.DEBUG, "Reset Left Turnlight")
+                    elseif self.rotatedTime < 0 and self.turnLightState == Lights.TURNLIGHT_RIGHT then
+                        self:setTurnLightState(Lights.TURNLIGHT_OFF, false);
+                        self.LA.debugger:print(GrisuDebug.DEBUG, "Reset Right Turnlight")
+                    end;
+                    self.LA.steerTreshReached = false;
+                end;
+            end;
+        end;
 end
 
 function LightAddon:updateTick(dt)
