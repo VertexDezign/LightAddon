@@ -13,6 +13,7 @@
 --              v1.4    - 2016-02-07 - Fix for strobelights, LAFix Version >=1.2 needed
 --              v1.4.1  - 2016-03-11 - Fix for BelV3.1 getn from nil
 --				v2.0 	- 2016-10-24 - FS17, only DRL and Strobes
+--              v2.1    - 2016-11-14 - Fix Patch 1.3, Fix turnlight reset for steering wheels
 -- @Descripion: Extends the standart FS Lights with additional Functions
 -- @web: http://grisu118.ch or http://vertexdezign.net
 -- Copyright (C) Grisu118, All Rights Reserved.
@@ -157,6 +158,7 @@ end
 
 function LightAddon:update(dt)
     -- Run Strobes
+    local realBeaconLights = g_gameSettings:getValue("realBeaconLights")
     for _, str in ipairs(self.LA.str) do
         if str.isAcitve then
             if str.time > str.seqLen then
@@ -183,7 +185,7 @@ function LightAddon:update(dt)
             str.time = str.time + dt
         else
             setVisibility(str.decoration, str.isAcitve)
-            if  g_realBeaconLights and str.realLight ~= nil then
+            if  realBeaconLights and str.realLight ~= nil then
                 setVisibility(str.realLight, str.isAcitve)
             end
         end
