@@ -13,7 +13,7 @@
 --              v1.4    - 2016-02-07 - Fix for strobelights, LAFix Version >=1.2 needed
 --              v1.4.1  - 2016-03-11 - Fix for BelV3.1 getn from nil
 --				v2.0 	- 2016-10-24 - FS17, only DRL and Strobes
---              v2.1    - 2016-11-14 - Fix Patch 1.3, Fix turnlight reset for steering wheels
+--              v2.0.1    - 2016-11-14 - Fix Patch 1.3, Fix turnlight reset for steering wheels
 -- @Descripion: Extends the standart FS Lights with additional Functions
 -- @web: http://grisu118.ch or http://vertexdezign.net
 -- Copyright (C) Grisu118, All Rights Reserved.
@@ -46,7 +46,7 @@ function LightAddon:load(savegame)
     self.LA.debugger:print(GrisuDebug.TRACE, "load(xml)")
 
     --Turn Signals
-	self.LA.steerTresh = 0.7
+	self.LA.steerTresh = 0.3
     
     --BeaconLights
     self.LA.beaconActive = false
@@ -164,7 +164,7 @@ function LightAddon:update(dt)
             if str.time > str.seqLen then
                 str.seqActive = not str.seqActive
                 setVisibility(str.decoration, str.seqActive)
-                if  g_realBeaconLights and str.realLight ~= nil then
+                if  realBeaconLights and str.realLight ~= nil then
                     setVisibility(str.realLight, str.seqActive)
                 end
                 str.time = 0
@@ -201,24 +201,22 @@ function LightAddon:update(dt)
         end
     end
 
-     if self:getIsActive() and self.turnLights ~= nil then
-            if self.turnLightState ~= Lights.TURNLIGHT_HAZARD and self.turnLightState ~= Lights.TURNLIGHT_OFF then --Reset turnlights after driving a curve
-                if math.abs(self.rotatedTime/self.maxRotTime) > self.LA.steerTresh then
-                    self.LA.steerTreshReached = true
+    if self:getIsActive() and self.turnLights ~= nil and self.steering then
+        if self.turnLightState ~= Lights.TURNLIGHT_HAZARD and self.turnLightState ~= Lights.TURNLIGHT_OFF then --Reset turnlights after driving a curve
+            local _,y,_ = getRotation(self.steering)           
+            if self.LA.steerTreshReached then
+                if math.abs(y) <= 0.001 then
+                    self.LA.steerTreshReached = false
+                    self:setTurnLightState(Lights.TURNLIGHT_OFF, false)
                     self.LA.debugger:print(GrisuDebug.TRACE, "steerTreshReached")
                 end
-                if self.LA.steerTreshReached and math.abs(self.rotatedTime) <= 0.1 then
-                    if self.rotatedTime > 0 and self.turnLightState == Lights.TURNLIGHT_LEFT then
-                        self:setTurnLightState(Lights.TURNLIGHT_OFF, false);
-                        self.LA.debugger:print(GrisuDebug.DEBUG, "Reset Left Turnlight")
-                    elseif self.rotatedTime < 0 and self.turnLightState == Lights.TURNLIGHT_RIGHT then
-                        self:setTurnLightState(Lights.TURNLIGHT_OFF, false);
-                        self.LA.debugger:print(GrisuDebug.DEBUG, "Reset Right Turnlight")
-                    end;
-                    self.LA.steerTreshReached = false;
-                end;
-            end;
-        end;
+            elseif self.turnLightState == Lights.TURNLIGHT_LEFT then
+                self.LA.steerTreshReached =  y > self.LA.steerTresh
+            elseif self.turnLightState == Lights.TURNLIGHT_RIGHT then
+                self.LA.steerTreshReached =  y < -self.LA.steerTresh
+            end
+        end
+    end
 end
 
 function LightAddon:updateTick(dt)
