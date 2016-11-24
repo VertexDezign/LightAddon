@@ -13,7 +13,7 @@
 --              v1.4    - 2016-02-07 - Fix for strobelights, LAFix Version >=1.2 needed
 --              v1.4.1  - 2016-03-11 - Fix for BelV3.1 getn from nil
 --				v2.0 	- 2016-10-24 - FS17, only DRL and Strobes
---              v2.0.1    - 2016-11-14 - Fix Patch 1.3, Fix turnlight reset for steering wheels
+--              v2.0.1  - 2016-11-14 - Fix Patch 1.3, Fix turnlight reset for steering wheels
 -- @Descripion: Extends the standart FS Lights with additional Functions
 -- @web: http://grisu118.ch or http://vertexdezign.net
 -- Copyright (C) Grisu118, All Rights Reserved.
