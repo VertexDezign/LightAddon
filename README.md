@@ -1,5 +1,7 @@
 # LightAddon
 
+[![ModHub Download]https://img.shields.io/badge/ModHub-2.0.1.0-blue.svg?style=flat-square](https://farming-simulator.com/mod.php?lang=de&country=ch&mod_id=53564&title=fs2017)
+
 ## Features
 
 - Global Script
