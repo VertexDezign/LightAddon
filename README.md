@@ -26,7 +26,7 @@ Grisu118 - VertexDezign
 ### Sample Mod
 Giants, Fire-Technology
 
-#LICENSE
+# LICENSE
 Copyright (c) 2016-2018 VertexDezign All rights reserved.  
 Copyright (c) 2016-2018 Benjamin Leber All rights reserved.
 
@@ -40,7 +40,7 @@ performance, accuracy, reliability, and non-infringement.
 
 The Terms and Conditions of GIANTS Software GmbH also apply.
 
-##Informal explanation
+## Informal explanation
 
 An informal explanation of what this all means (this part is not legalese and can't be treated as such)
 
